@@ -1,0 +1,1 @@
+gmt grdtrack icerise_coords.txt -GHR24_GHF_mean.grd -GHR24_GHF_std.grd > icerise_ghf.txt
