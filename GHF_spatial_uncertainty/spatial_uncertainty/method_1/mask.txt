@@ -1,0 +1,73 @@
+gmt kml2gmt crary_200kmrad.kml > crary_200kmrad.txt
+gmt kml2gmt skytrain_200kmrad.kml > skytrain_200kmrad.txt
+
+#SKYTRAIN SPATIAL UNCERTAINTY
+gmt grdmask skytrain_200kmrad.txt -R0/360/-90/-60 -I0.5d -NNaN/1/1 -Gmask.grd -V -fg
+#gmt grdmask icerise_coords.txt -R-180/180/-90/-60 -I1m -NNaN/1/1 -S200k -Gmask.grd -V
+
+gmt grdmath -R0/360/-90/-60 HR24_GHF_mean.grd mask.grd MUL = out_ghf_mean_sk.grd
+gmt grdmath -R0/360/-90/-60 HR24_GHF_std.grd mask.grd MUL = out_ghf_std_sk.grd
+
+gmt grd2xyz out_ghf_mean_sk.grd > out_ghf_mean_sk.txt
+gmt grd2xyz out_ghf_std_sk.grd > out_ghf_std_sk.txt
+
+paste out_ghf_mean_sk.txt out_ghf_std_sk.txt | awk '{if ($3 != "NaN" && $6 != "NaN"){print $1, $2, $3, $6}}' > out_ghf_mean_std_combined_sk.txt
+
+
+gmt blockmean out_ghf_mean_std_combined_sk.txt -R0/360/-90/-60 -I60d -W+s -E+p > ghf_blockmean_w_sk.txt
+
+gmt blockmean out_ghf_mean_std_combined_sk.txt -R0/360/-90/-60 -I60d -E > ghf_blockmean_sk.txt
+
+
+#CRARY SPATIAL UNCERTAINTY
+gmt grdmask crary_200kmrad.txt -R0/360/-90/-60 -I0.5d -NNaN/1/1 -Gmask.grd -V -fg
+
+gmt grdmath -R0/360/-90/-60 HR24_GHF_mean.grd mask.grd MUL = out_ghf_mean_cr.grd
+gmt grdmath -R0/360/-90/-60 HR24_GHF_std.grd mask.grd MUL = out_ghf_std_cr.grd
+
+gmt grd2xyz out_ghf_mean_cr.grd > out_ghf_mean_cr.txt
+gmt grd2xyz out_ghf_std_cr.grd > out_ghf_std_cr.txt
+
+paste out_ghf_mean_cr.txt out_ghf_std_cr.txt | awk '{if ($3 != "NaN" && $6 != "NaN"){print $1, $2, $3, $6}}' > out_ghf_mean_std_combined_cr.txt
+
+
+gmt blockmean out_ghf_mean_std_combined_cr.txt -R0/360/-90/-60 -I60d -W+s -E+p > ghf_blockmean_w_cr.txt
+
+gmt blockmean out_ghf_mean_std_combined_cr.txt -R0/360/-90/-60 -I60d -E > ghf_blockmean_cr.txt
+
+
+#ALL IN ONE FILE
+
+cr_w=$(awk 'NR==1{print $0}' ghf_blockmean_w_cr.txt)
+cr_unw=$(awk 'NR==1{print $0}' ghf_blockmean_cr.txt)
+sk_w=$(awk 'NR==1{print $0}' ghf_blockmean_w_sk.txt)
+sk_unw=$(awk 'NR==1{print $0}' ghf_blockmean_sk.txt)
+
+echo "name_w/unw long lat mean uncert min max (w)" > all_ghf_blockmeans_cr_sk.txt
+echo "cr_w $cr_w" >> all_ghf_blockmeans_cr_sk.txt
+echo "cr_unw $cr_unw" >> all_ghf_blockmeans_cr_sk.txt
+echo "sk_w $sk_w" >> all_ghf_blockmeans_cr_sk.txt
+echo "sk_unw $sk_unw" >> all_ghf_blockmeans_cr_sk.txt
+
+#TIDYING UP
+
+mkdir out_files
+mv crary_200kmrad.txt out_files
+mv skytrain_200kmrad.txt out_files
+mv mask.grd out_files
+mv out_ghf_mean_sk.grd out_files
+mv out_ghf_std_sk.grd out_files
+mv out_ghf_mean_sk.txt out_files
+mv out_ghf_std_sk.txt out_files
+mv out_ghf_mean_std_combined_sk.txt out_files
+mv ghf_blockmean_w_sk.txt out_files
+mv ghf_blockmean_sk.txt out_files
+mv out_ghf_mean_cr.grd out_files
+mv out_ghf_std_cr.grd out_files
+mv out_ghf_mean_cr.txt out_files
+mv out_ghf_std_cr.txt out_files
+mv out_ghf_mean_std_combined_cr.txt out_files
+mv ghf_blockmean_w_cr.txt out_files
+mv ghf_blockmean_cr.txt out_files
+
+
