@@ -1,0 +1,50 @@
+##1
+gmt begin antarctica_heatflow_map png
+gmt basemap -R-180/180/-90/-60 -Js0/-90/10c/-60 -Baf
+gmt grdimage HR24_GHF_mean.grd -Cpolar -Js0/-90/10c/-60 -E200 -Q
+#gmt grdimage HR24_GHF_mean_PS.grd -Cpolar -Js0/-90/10c/-60 -Ei10
+#-Q
+#-Ei10
+#gmt coast -R-180/180/-90/-60 -Js0/-90/10c/-60 -Bafg30 -Di -W0.5p
+gmt coast -Js0/-90/10c/-60 -W0.5p
+gmt coast -Js0/-90/10c/-60 -W0.6p -A+ag 
+#gmt plot add_coastline_medium_res_line.gmt -JX10c -W0.3p -fp
+gmt plot -St0.45c -Gwhite -W0.6p <<EOF
+-172.5 -82.93
+EOF
+gmt text -F+f8,black+jTL -X0.3c -Gwhite <<EOF
+-172.5 -82.93 Crary Ice Rise
+EOF
+gmt end show
+
+##2 (trying to plot ps file)
+#gmt begin antarctica_heatflow_map2 png
+#gmt basemap -R-180/180/-90/-60 -Js0/-90/-71/1:60000000 -Bafg30
+#gmt grdimage HR24_GHF_mean_PS.grd -Cpolar -Jx1:60000 -R0/360/-90/-60
+#gmt coast -Js0/-90/10c/-60 -W0.5p
+#gmt coast -Js0/-90/10c/-60 -W0.6p -A+ag
+#gmt plot -St0.45c -Gwhite -W0.6p <<EOF
+#-172.5 -82.93
+#EOF
+#gmt text -F+f8,black+jTL -X0.3c -Gwhite <<EOF
+#-172.5 -82.93 Crary Ice Rise
+#EOF
+#gmt end show
+
+
+gmt begin crary_heatflow_map png
+#gmt basemap -R-135/-87/155/-74r -Js0/-90/1:60000000 -Bafg
+gmt basemap -R132/-84/-155/-75+r -JS0/-90/11c -Bxg20a20 -Byg4a4
+gmt grdimage HR24_GHF_mean.grd -Cpolar -JS0/-90/11c -E200 -Q
+#gmt coast -R-180/180/-90/-60 -Js0/-90/10c/-60 -Bafg30 -Di -W0.5p
+#gmt coast -R-135/-87/155/-74r -JS0/-90/10c -Bafg -W0.5p
+gmt coast -W0.6p -A+ag
+gmt coast -W0.5p -Bxg20a20 -Byg4a4
+gmt plot -St0.45c -Gwhite -W0.6p <<EOF
+-172.5 -82.93
+EOF
+gmt text -F+f8,black+jTL -X0.3c -Gwhite <<EOF
+168.5 -82.5 Crary Ice Rise
+EOF
+gmt end show
+

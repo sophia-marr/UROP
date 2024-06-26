@@ -1,0 +1,63 @@
+gmt begin heatflow_maps png
+gmt subplot begin 2x2 -Fs10c -M0.7c/1.1c -A -B
+
+##1 ant heat flow
+gmt subplot set
+gmt basemap -R-180/180/-90/-60 -JS0/-90/10c 
+gmt makecpt -Cvik -G-0.8/0.8 -T10/130
+gmt grdimage HR24_GHF_mean.grd -C -JS0/-90/10c -E200 -Q
+gmt coast -JS0/-90/10c -W0.5p
+gmt coast -JS0/-90/10c -W0.6p -A+ag -Bxa30 -BNwse --MAP_FRAME_TYPE=plain
+gmt plot -St0.45c -Gwhite -W0.6p -JS0/-90/10c <<EOF
+-172.5 -82.93
+EOF
+gmt text -F+f7,black+jTL -Gwhite -JS0/-90/10c <<EOF
+176.5 -82.93 Crary Ice Rise
+EOF
+gmt colorbar -C -Ba20f10+l"Mean GHF (mW m^-2)" -Dx1c/-1.3c+w8c+e+h 
+
+##2 ant std
+gmt subplot set
+gmt basemap -R-180/180/-90/-60 -JS0/-90/10c
+gmt makecpt -C60/60/60,250/250/250 -T0/20
+gmt grdimage HR24_GHF_std.grd -C -JS0/-90/10c -E200 -Qred
+gmt coast -JS0/-90/10c -W0.5p
+gmt coast -JS0/-90/10c -W0.6p -A+ag -Bxa30 -BNwse --MAP_FRAME_TYPE=plain
+gmt plot -St0.45c -Gwhite -W0.6p -JS0/-90/10c <<EOF
+-172.5 -82.93
+EOF
+gmt text -F+f7,black+jTL -Gwhite -JS0/-90/10c <<EOF
+176.5 -82.93 Crary Ice Rise
+EOF
+gmt colorbar -C -Baf+l"Uncertainty GHF (mW m^-2)" -Dx1c/-1.3c+w8c+ef+h
+
+##3 crary heat flow 
+gmt subplot set
+gmt basemap -R132/-84/-155/-75+r -JS0/-90/10c -Bxg20a20 -Byg4a4
+gmt makecpt -Cvik -G-0.8/0.8 -T10/130
+gmt grdimage HR24_GHF_mean.grd -C -JS0/-90/10c -E200 -Q
+gmt coast -W0.6p -R132/-84/-155/-75+r -JS0/-90/10c -A+ag
+gmt coast -W0.5p -R132/-84/-155/-75+r -JS0/-90/10c -Bxg20a20 -Byg4a4
+gmt plot -St0.45c -Gwhite -W0.6p -R132/-84/-155/-75+r -JS0/-90/10c <<EOF
+-172.5 -82.93
+EOF
+gmt text -F+f8,black+jTL -Gwhite -R132/-84/-155/-75+r -JS0/-90/10c <<EOF
+169.5 -82.5 Crary Ice Rise
+EOF
+
+##4 crary std
+gmt subplot set
+gmt basemap -R132/-84/-155/-75+r -JS0/-90/10c -Bxg20a20 -Byg4a4
+gmt makecpt -C60/60/60,250/250/250 -T0/20
+gmt grdimage HR24_GHF_std.grd -C -JS0/-90/10c -E200 -Qred
+gmt coast -W0.6p -R132/-84/-155/-75+r -JS0/-90/10c -A+ag
+gmt coast -W0.5p -R132/-84/-155/-75+r -JS0/-90/10c -Bxg20a20 -Byg4a4
+gmt plot -St0.45c -Gwhite -W0.6p -R132/-84/-155/-75+r -JS0/-90/10c <<EOF
+-172.5 -82.93
+EOF
+gmt text -F+f8,black+jTL -Gwhite -R132/-84/-155/-75+r -JS0/-90/10c <<EOF
+169.5 -82.5 Crary Ice Rise
+EOF
+
+gmt subplot end
+gmt end show
